@@ -1,0 +1,47 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Lambda para monitoreo de tiempo de respuesta tracking pull
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 3
+
+Resources:
+  # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+  TrackingPushRespTimeMonitoringFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Role: arn:aws:iam::311028179126:role/cicd-lambda-deployments-execution-role
+      Environment:
+        Variables:
+          DB_USER: monitoreo
+          DB_PASS: bigbluex
+          DB_HOST: cnetdesa.cuo464axjmnt.us-west-2.rds.amazonaws.com
+          DB_PORT: 1533
+          DB_SID: cnetdesa
+      # Tags:
+      #   tag-uno: absalon
+      #   tag-dos: absalon2
+      VpcConfig:
+        SecurityGroupIds:
+          - sg-03f85533d59911204
+        SubnetIds:
+          - subnet-0545ef2dc56d18e87
+          - subnet-02347e2c3319af465
+      Timeout: 15
+      #DeadLetterQueue:
+      CodeUri: hello_world/
+      Handler: app.lambda_handler
+      Runtime: python3.7
+      Architectures:
+        - x86_64
+      Layers:
+        - arn:aws:lambda:us-west-2:311028179126:layer:bx-python-cx_Oracle:2
+      # Events:
+      #   HelloWorld:
+      #     Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+      #     Properties:
+      #       Path: /hello
+      #       Method: get
+
